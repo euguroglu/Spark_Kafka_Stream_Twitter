@@ -18,6 +18,11 @@ from pyspark import SparkContext
 from pyspark.streaming import StreamingContext
 import json
 
+schema = StructType([
+    StructField("user", StringType(), True),
+	StructField("text", StringType(), True)
+])
+
 if __name__ == "__main__":
 
 	#Create Spark Context to Connect Spark Cluster
@@ -25,7 +30,13 @@ if __name__ == "__main__":
 
     kafka_df = spark.readStream.format("kafka").option("kafka.bootstrap.servers", "localhost:9092").option("subscribe", "twitter").option("startingOffsets", "earliest").load()
     kafka_df_string = kafka_df.selectExpr("CAST(value AS STRING)")
+    tweets_table = kafka_df_string.select(from_json(col("value"), schema).alias("data")).select("data.*")
+    #user = tweets_table.select("user")
+    #user_try = user.writeStream.format("console").option("truncate","false").start()
+    #user_try.avaitTermination()
+    tweets = tweets_table.writeStream.format("console").option("truncate","false").start()
+    tweets_table.show()
+    tweets.awaitTermination()
+    #query = kafka_df_string.writeStream.format("console").option("truncate","false").start()
 
-    query = kafka_df_string.writeStream.format("console").option("truncate","false").start()
-
-    query.awaitTermination()
+    #query.awaitTermination()

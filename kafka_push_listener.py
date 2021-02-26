@@ -41,4 +41,4 @@ class KafkaPushListener(StreamListener):
 twitter_stream = Stream(auth, KafkaPushListener())
 
 #Produce Data that has Game of Thrones hashtag (Tweets)
-twitter_stream.filter(track=['#Daft Punk'])
+twitter_stream.filter(track=['#Turkey'])
