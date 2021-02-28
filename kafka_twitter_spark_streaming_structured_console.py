@@ -2,15 +2,6 @@ from pyspark.sql import SparkSession
 from pyspark.sql.functions import *
 from pyspark.sql.types import *
 
-def write_to_cassandra(target_df, batch_id):
-    target_df.write \
-        .format("org.apache.spark.sql.cassandra") \
-        .option("keyspace", "tweet_db") \
-        .option("table", "tweet2") \
-        .mode("append") \
-        .save()
-    target_df.show()
-
 if __name__ == "__main__":
 
 	#Create Spark Context to Connect Spark Cluster
@@ -18,12 +9,7 @@ if __name__ == "__main__":
         .builder \
         .appName("PythonStreamingKafkaTweetCount") \
         .master("local[3]") \
-        .config("spark.cassandra.connection.host", "localhost") \
-        .config("spark.cassandra.connection.port", "9042") \
-        .config("spark.sql.extensions", "com.datastax.spark.connector.CassandraSparkExtensions") \
-        .config("spark.sql.catalog.lh", "com.datastax.spark.connector.datasource.CassandraCatalog") \
         .config("spark.streaming.stopGracefullyOnShutdown", "true") \
-        .config("spark.cassandra.output.ignoreNulls", "true") \
         .getOrCreate()
     #Preparing schema for tweets
     schema = StructType([
@@ -61,23 +47,11 @@ if __name__ == "__main__":
 
     final_df.printSchema()
 
+    console_query = final_df.writeStream \
+    .format("console") \
+    .outputMode("append") \
+    .option("checkpointLocation", "chk-point-dir") \
+    .trigger(processingTime="1 minute") \
+    .start()
 
-    output_query = final_df.writeStream \
-        .foreachBatch(write_to_cassandra) \
-        .outputMode("update") \
-        .option("checkpointLocation", "chk-point-dir") \
-        .trigger(processingTime="1 minute") \
-        .start()
-
-    output_query.awaitTermination()
-    #kafka_df_string = kafka_df.selectExpr("CAST(value AS STRING)")
-    #tweets_table = kafka_df_string.select(from_json(col("value"), schema).alias("data")).select("data.*")
-    #user = tweets_table.select("user")
-    #user_try = user.writeStream.format("console").option("truncate","false").start()
-    #user_try.avaitTermination()
-    #tweets = tweets_table.writeStream.format("console").option("truncate","false").start()
-    #tweets_table.show()
-    #tweets.awaitTermination()
-    #query = kafka_df_string.writeStream.format("console").option("truncate","false").start()
-
-    #query.awaitTermination()
+    console_query.awaitTermination()
