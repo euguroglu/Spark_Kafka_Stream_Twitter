@@ -1,5 +1,5 @@
-#These information comes from Twitter API
-#Create a Twitter Account and Get These Information from apps.twitter.com
+#You can obtain these informations from twitter api
+#Check readme file to get url for an application
 
 # consumer_key = 'TWITTER_APP_CONSUMER_KEY'
 # consumer_secret = 'TWITTER_APP_CONSUMER_SECRET'
