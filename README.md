@@ -103,7 +103,7 @@ value_df = kafka_df.select(from_json(col("value").cast("string"),schema).alias("
 
 ### Code Description
 
-To implement this project yourself you need to apply twitter developer account first. You can use below [link](https://developer.twitter.com/en/apply-for-access) to submit an application. Then you can follow steps mentioned on the task list above.
+To implement this project yourself you need to apply twitter developer account first. You can use [link](https://developer.twitter.com/en/apply-for-access) to submit an application. Then you can follow steps mentioned on the task list above.
 
 kafka_tweet_producer.py is used to connect Twitter API with the Apache Kafka as well as filtering streams accourding to given hashtag.
 
