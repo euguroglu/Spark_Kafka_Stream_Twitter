@@ -6,13 +6,13 @@ from tweepy import Stream
 from tweepy.streaming import StreamListener
 import twitter_config
 
-#TWITTER API CONFIGURATIONS
+#Twitter developer account configurations
 consumer_key = twitter_config.consumer_key
 consumer_secret = twitter_config.consumer_secret
 access_token = twitter_config.access_token
 access_secret = twitter_config.access_secret
 
-#TWITTER API AUTH
+#Twitter developer account auth
 auth = OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_secret)
 

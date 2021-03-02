@@ -1,2 +1,3 @@
-spark-submit kafka_push_listener.py
-spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.0.1,com.datastax.spark:spark-cassandra-connector_2.12:3.0.0-beta kafka_twitter_spark_streaming_structured_console.py
+spark-submit kafka_tweet_producer.py
+spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.0.1,com.datastax.spark:spark-cassandra-connector_2.12:3.0.0-beta twitter_structured_stream_spark_kafka_cassandra.py
+spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.0.1 twitter_structured_stream_spark_kafka_console.py
